@@ -1,2 +1,7 @@
+com\roydon\controller\LinkController.class
+com\roydon\config\WebConfig.class
+com\roydon\controller\ArticleController.class
+com\roydon\RoydonBlogApplication.class
+com\roydon\controller\CategoryController.class
 com\roydon\config\SecurityConfig.class
 com\roydon\controller\BlogLoginController.class

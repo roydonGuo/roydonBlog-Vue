@@ -45,17 +45,16 @@ public class BlogLoginServiceImpl implements BlogLoginService {
     @Override
     public ResponseResult login(User user) {
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         //判断是否认证通过
         if (Objects.isNull(authentication)) {
             throw new RuntimeException("用户名或密码错误");
         }
-
         // 认证成功，从Authentication获取LoginUser
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
 
-        log.info("loginUser:{}",loginUser);
+        log.info("loginUser:{}", loginUser);
 
         String userId = loginUser.getUser().getId().toString();
         // 生成token
@@ -69,7 +68,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(jwt, userInfoVo);
 
-        log.info("当前登录用户：{}",blogUserLoginVo);
+        log.info("当前登录用户：{}", blogUserLoginVo);
 
         return ResponseResult.okResult(blogUserLoginVo);
     }
