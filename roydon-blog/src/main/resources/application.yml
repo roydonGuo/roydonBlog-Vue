@@ -17,7 +17,6 @@ spring:
     database: 7
 mybatis-plus:
   configuration:
-    # 日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
@@ -25,3 +24,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+
+oss: #七牛云对象存储
+  accessKey: 5QiJWZTAE8CCDpjiJyy8RlxZWtPzUP0CEWX-_O3i
+  secretKey: S6tbwe-RyZ1R3KN3APYpVYtC5gcnpnCUFTkFWx51
+  bucket: roydon-blog
