@@ -13,6 +13,8 @@ import com.roydon.domain.entity.Comment;
  */
 public interface CommentService extends IService<Comment> {
 
-    ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize);
+    ResponseResult commentList(String commentType, Integer pageNum, Integer pageSize, Long articleId);
+
+    ResponseResult addComment(Comment comment);
 }
 
