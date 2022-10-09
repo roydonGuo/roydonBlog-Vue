@@ -18,4 +18,9 @@ public class PathUtils {
         String fileType = fileName.substring(index);
         return new StringBuilder().append(datePath).append(uuid).append(fileType).toString();
     }
+
+    public static void main(String[] args) {
+//        System.out.println(generateFilePath("fileName.jpg"));
+    }
+
 }
