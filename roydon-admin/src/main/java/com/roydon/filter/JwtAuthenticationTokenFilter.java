@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.roydon.constants.RedisConstants.LOGIN_BLOG_KEY;
+import static com.roydon.constants.RedisConstants.LOGIN_ADMIN_KEY;
 
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
@@ -48,7 +48,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         String userId = claims.getSubject();
         //从redis中获取用户信息
-        LoginUser loginUser = redisCache.getCacheObject(LOGIN_BLOG_KEY + userId);
+        LoginUser loginUser = redisCache.getCacheObject(LOGIN_ADMIN_KEY + userId);
         //如果redis获取不到
         if (Objects.isNull(loginUser)) {
             throw new RuntimeException("用户未登录");

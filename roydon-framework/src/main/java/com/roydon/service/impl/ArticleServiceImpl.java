@@ -14,6 +14,7 @@ import com.roydon.mapper.ArticleMapper;
 import com.roydon.service.ArticleService;
 import com.roydon.service.CategoryService;
 import com.roydon.utils.BeanCopyUtils;
+import com.roydon.utils.RedisCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.roydon.constants.RedisConstants.ARTICLE_VIEWCOUNT;
 import static com.roydon.constants.SystemConstants.ARTICLE_STATUS_NORMAL;
 
 /**
@@ -36,6 +38,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Resource
     private CategoryService categoryService;
+
+    @Resource
+    private RedisCache redisCache;
 
     /**
      * 热门文章list
@@ -104,6 +109,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 文章详情
+     *
      * @param id id
      * @return ResponseResult
      */
@@ -111,6 +117,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult getArticleDetail(Long id) {
 
         Article article = getById(id);
+
+        Integer viewCount = redisCache.getCacheMapValue(ARTICLE_VIEWCOUNT, id.toString());
+        if (viewCount > -1) {
+            article.setViewCount(viewCount.longValue());
+        }
+
         ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
         //获取分类名
         Category category = categoryService.getById(article.getCategoryId());
@@ -119,5 +131,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         return ResponseResult.okResult(articleDetailVo);
+    }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        //redis中文章浏览量自增1
+        redisCache.incrementCacheMapValue(ARTICLE_VIEWCOUNT, id.toString(), 1);
+
+        return ResponseResult.okResult();
     }
 }

@@ -2,7 +2,10 @@ package com.roydon.constants;
 
 public class RedisConstants {
 
-    public static final String LOGIN_KEY="login:";
+    public static final String LOGIN_BLOG_KEY="login:blog:";
+    public static final String LOGIN_ADMIN_KEY="login:admin:";
+
+    public static final String ARTICLE_VIEWCOUNT="article:viewCount";
 
 //    public static final String LOGIN_CODE_KEY = "login:code:";
 //    public static final Long LOGIN_CODE_TTL = 2L;//存在时间

@@ -8,7 +8,7 @@ import com.roydon.domain.vo.BlogUserLoginVo;
 import com.roydon.domain.vo.UserInfoVo;
 import com.roydon.enums.AppHttpCodeEnum;
 import com.roydon.exception.SystemException;
-import com.roydon.service.BlogLoginService;
+import com.roydon.service.AdminLoginService;
 import com.roydon.utils.BeanCopyUtils;
 import com.roydon.utils.JwtUtil;
 import com.roydon.utils.RedisCache;
@@ -16,29 +16,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Objects;
 
-import static com.roydon.constants.RedisConstants.LOGIN_BLOG_KEY;
+import static com.roydon.constants.RedisConstants.LOGIN_ADMIN_KEY;
 
 /**
- * Created by Intellij IDEA
- * Author: yi cheng
- * Date: 2022/10/7
- * Time: 19:42
+ * Author: roydon - 2022/10/10
  **/
 @Slf4j
 @Service
-public class BlogLoginServiceImpl implements BlogLoginService {
+public class AdminLoginServiceImpl implements AdminLoginService {
 
     @Resource
     private AuthenticationManager authenticationManager;
 
     @Resource
     private RedisCache redisCache;
+
 
     /**
      * 登录
@@ -48,6 +45,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
      */
     @Override
     public ResponseResult login(User user) {
+
         if (StringUtils.isEmpty(user.getUserName())) {
             throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
         }
@@ -66,11 +64,8 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         // 生成token
         String jwt = JwtUtil.createJWT(userId);
         // 存入redis
-        redisCache.setCacheObject(LOGIN_BLOG_KEY + userId, loginUser);
-        //把token响应给前端
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("token", jwt);
-//        return new ResponseResult(CODE_200, "登陆成功", map);
+        redisCache.setCacheObject(LOGIN_ADMIN_KEY + userId, loginUser);
+
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(jwt, userInfoVo);
 
@@ -79,17 +74,5 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         return ResponseResult.okResult(blogUserLoginVo);
     }
 
-
-    @Override
-    public ResponseResult logout() {
-        //获取token 解析获取userid
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        //获取userid
-        Long userId = loginUser.getUser().getId();
-        //删除redis中的用户信息
-        redisCache.deleteObject(LOGIN_BLOG_KEY + userId);
-        return ResponseResult.okResult();
-    }
 
 }

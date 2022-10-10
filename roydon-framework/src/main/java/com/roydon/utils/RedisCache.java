@@ -162,6 +162,18 @@ public class RedisCache {
         return redisTemplate.opsForHash().entries(key);
     }
 
+
+    /**
+     * 根据map的key对值进行自增操作
+     *
+     * @param key
+     * @param hKey
+     * @param v
+     */
+    public void incrementCacheMapValue(String key, String hKey, long v) {
+        redisTemplate.boundHashOps(key).increment(hKey, v);
+    }
+
     /**
      * 往Hash中存入数据
      *

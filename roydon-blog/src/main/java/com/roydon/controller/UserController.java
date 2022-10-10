@@ -4,12 +4,14 @@ import com.roydon.annotation.SystemLog;
 import com.roydon.domain.ResponseResult;
 import com.roydon.domain.entity.User;
 import com.roydon.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/user")
+@Api(tags = "用户",description = "用户相关接口")
 public class UserController {
 
     @Resource
