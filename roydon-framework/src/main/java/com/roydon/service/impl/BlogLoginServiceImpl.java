@@ -43,7 +43,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
     /**
      * 登录
      *
-     * @param user
+     * @param user user
      * @return ResponseResult.okResult(blogUserLoginVo)
      */
     @Override

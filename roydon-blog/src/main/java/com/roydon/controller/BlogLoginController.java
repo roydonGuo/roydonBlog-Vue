@@ -16,12 +16,12 @@ public class BlogLoginController {
     private BlogLoginService blogLoginService;
 
     @PostMapping("/login")
-    public ResponseResult login(@RequestBody User user){
+    public ResponseResult login(@RequestBody User user) {
         return blogLoginService.login(user);
     }
 
     @PostMapping("/logout")
-    public ResponseResult logout(){
+    public ResponseResult logout() {
         return blogLoginService.logout();
     }
 }
